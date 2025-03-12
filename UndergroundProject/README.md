@@ -1,97 +1,104 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Operating system
 
-# Getting Started
+This guide is for linux installation, adjust it if its installed via WSL or Windows
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+For WSL it should work mostly as here described
 
-## Step 1: Start Metro
+# Prerequisities
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+I suggest you to install prerequisities from backend project first
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+## Install Android Studio
 
-```sh
-# Using npm
-npm start
+Go to the official Android Studio download page:
+https://developer.android.com/studio
 
-# OR using Yarn
-yarn start
+Download the version for your operating system (Windows, macOS, or Linux).
+
+Install using the on-screen prompts. On first launch, Android Studio will guide you through a setup wizard that installs the latest Android SDK, the Android SDK Platform-Tools, and the Android SDK Build-Tools.
+
+## Install java
+
+```
+sudo apt-get update
+sudo apt-get install openjdk-17-jdk
 ```
 
-## Step 2: Build and run your app
+## Add java environmental variables
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
-
-### Android
-
-```sh
-# Using npm
-npm run android
-
-# OR using Yarn
-yarn android
+```
+export JAVA_HOME="/usr/lib/jvm/java-17-openjdk-amd64"
+export PATH="$JAVA_HOME/bin:$PATH"
 ```
 
-### iOS
+## Set ANDROID_HOME
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
-
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
-
-```sh
-bundle install
+```
+export ANDROID_HOME="$HOME/Android/Sdk"
+export PATH="$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:$PATH"
 ```
 
-Then, and every time you update your native dependencies, run:
+# Setup
 
-```sh
-bundle exec pod install
+## Cloning repository
+
+`git clone git@github.com:underground-wsb/underground-project-front.git`
+
+## Installing necessary libraries
+
+`cd UndergroundProject`
+
+`npm install`
+
+## Configuring android studio
+
+Open Android Studio.
+
+SDK Manager:
+
+At the top of Android Studio, click Tools → SDK Manager.
+Make sure you have at least one SDK Platform installed. We've got default, 15, SDK Build Tools 35 i hope.
+SDK Tools tab:
+Check that you have Android SDK Build-Tools, Android SDK Platform-Tools, and Android SDK Tools installed.
+
+Now, configure environmental variables
+
+```
+export ANDROID_SDK_ROOT=$HOME/Library/Android/sdk
+export PATH=$PATH:$ANDROID_SDK_ROOT/emulator
+export PATH=$PATH:$ANDROID_SDK_ROOT/platform-tools
 ```
 
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
+```
+export ANDROID_HOME="$HOME/Android/Sdk"
+# OR
+export ANDROID_SDK_ROOT="$HOME/Android/Sdk"
 
-```sh
-# Using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
+export PATH="$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:$PATH"
 ```
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+By default in android studio, you should have your base device configured, if no
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+Click Tools → AVD Manager (Android Virtual Device Manager).
+Click Create Virtual Device.
 
-## Step 3: Modify your app
+You may need adb working. After running virtual device, check if `adb devices` in console gives you an output
+If no, then istall it as prompt suggests
 
-Now that you have successfully run the app, let's make changes!
+If AND ONLY IF `@react-native-community/cli` is not present in package.json inside UndergroundProject,
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+`npm install --save-dev @react-native-community/cli`
 
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+# Checking if everything works correctly
 
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
+After doing above steps, <b>With emulated device running</b> do:
 
-## Congratulations! :tada:
+`npx react-native doctor`
 
-You've successfully run and modified your React Native App. :partying_face:
+This will show you, which things you installed correctly and what do you need to fix
 
-### Now what?
+# Running Application
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
+`npx react-native start` in one terminal - launches bundler
 
-# Troubleshooting
-
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+`npx react-native run-android` in the other one - runs app
